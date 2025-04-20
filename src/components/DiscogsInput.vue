@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div>
       <div class="bg-white rounded-lg shadow-md p-6 mb-4">
         <h2 class="text-lg font-semibold mb-4">Aplikasi Input Data Discogs</h2>
@@ -48,19 +48,262 @@
           <p class="text-black"><strong>LABEL:</strong> {{ releaseInfo.label ? releaseInfo.label.join(', ') : '' }}</p>
           <p class="text-black"><strong>RELEASED:</strong> {{ releaseInfo.released_year }}</p>
   
+          <!-- <div class="mt-4">
+            <label for="currency" class="block text-gray-700 text-sm font-bold mb-2">Mata Uang:</label>
+            <select
+              id="currency"
+              v-model="selectedCurrency"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            >
+              <option value="USD">Dollar (USD)</option>
+              <option value="EUR">Euro (EUR)</option>
+            </select>
+          </div>
+  
           <div class="mt-4">
-            <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Harga:</label>
+            <label :for="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'" class="block text-gray-700 text-sm font-bold mb-2">Harga {{ selectedCurrency === 'USD' ? 'Dollar' : 'Euro' }}:</label>
             <input
               type="number"
-              id="price"
-              v-model="price"
+              :id="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'"
+              v-model="currencyPrice"
               step="0.01"
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
+  
+          <div v-if="convertedPriceIDR !== null" class="mt-4">
+            <label for="priceIDR" class="block text-gray-700 text-sm font-bold mb-2">Harga (IDR):</label>
+            <input
+              type="text"
+              id="priceIDR"
+              :value="formatCurrency(convertedPriceIDR)"
+              readonly
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100"
+            />
+          </div>
+  
+          <div class="mt-4">
+            <label for="coverQuality" class="block text-gray-700 text-sm font-bold mb-2">Kualitas Cover (0.5 - 1):</label>
+            <input
+              type="number"
+              id="coverQuality"
+              v-model.number="coverQuality"
+              step="0.1"
+              min="0.5"
+              max="1"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+  
+          <div v-if="calculatedPrice !== null" class="mt-4">
+            <label for="calculatedPrice" class="block text-gray-700 text-sm font-bold mb-2">Hasil Kalkulasi:</label>
+            <input
+              type="text"
+              id="calculatedPrice"
+              :value="formatCurrency(calculatedPrice)"
+              readonly
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100"
+            />
+          </div>
+  
+          <div v-if="finalPrice !== null" class="mt-4">
+            <label for="finalPrice" class="block text-gray-700 text-sm font-bold mb-2">Harga Final:</label>
+            <input
+              type="text"
+              id="finalPrice"
+              :value="formatCurrency(finalPrice)"
+              readonly
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100"
+            />
+          </div> -->
+
+<!-- <div class="mt-4">
+  <div>
+    <label>
+      <input type="radio" v-model="hargaMode" value="otomatis" class="text-gray-700"> Harga Otomatis
+    </label>
+  </div>
+
+  <div v-if="hargaMode === 'otomatis'" class="mt-2">
+    <label for="currency" class="block text-gray-700 text-sm font-bold mb-2">Pilih Mata Uang:</label>
+    <select
+      id="currency"
+      v-model="selectedCurrency"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    >
+      <option value="USD">Dollar (USD)</option>
+      <option value="EUR">Euro (EUR)</option>
+    </select>
+
+    <label :for="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'" class="block text-gray-700 text-sm font-bold mb-2">Harga {{ selectedCurrency === 'USD' ? 'Dollar' : 'Euro' }}:</label>
+    <input
+      type="number"
+      :id="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'"
+      v-model="currencyPrice"
+      step="0.01"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+
+    <label for="priceIDR" class="block text-gray-700 text-sm font-bold mb-2">Harga (IDR):</label>
+    <input
+      type="text"
+      id="priceIDR"
+      :value="formatCurrency(convertedPriceIDR)"
+      readonly
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100"
+    />
+
+    <label for="kualitasCoverInput" class="block text-gray-700 text-sm font-bold mb-2">Kualitas Cover (1-100):</label>
+    <input
+      type="number"
+      id="kualitasCoverInput"
+      v-model.number="kualitasCoverInput"
+      min="1"
+      max="100"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+
+    <label for="finalPriceOtomatis" class="block text-gray-700 text-sm font-bold mb-2">Harga Akhir:</label>
+    <input
+      type="text"
+      id="finalPriceOtomatis"
+      :value="formatCurrency(finalPrice)"
+      readonly
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100"
+    />
+  </div>
+
+  <div class="mt-4">
+    <label>
+      <input type="radio" v-model="hargaMode" value="manual" class="text-gray-700"> Add Harga Manual
+    </label>
+  </div>
+
+  <div v-if="hargaMode === 'manual'" class="mt-2">
+    <label for="hargaManual" class="block text-gray-700 text-sm font-bold mb-2">Masukkan Harga Manual (IDR):</label>
+    <input
+      type="number"
+      id="hargaManual"
+      v-model.number="hargaManual"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    />
+
+    <label for="finalPriceManual" class="block text-gray-700 text-sm font-bold mb-2">Harga Akhir:</label>
+    <input
+      type="text"
+      id="finalPriceManual"
+      :value="formatCurrency(hargaManual)"
+      readonly
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100"
+    />
+  </div>
+</div> -->
+
+<div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="border rounded p-4" :class="{ 'bg-gray-100': hargaMode === 'manual' }">
+    <label class="block font-bold mb-2">
+      <input type="radio" v-model="hargaMode" value="otomatis" class="mr-2"> Harga Otomatis
+    </label>
+    <div v-if="hargaMode === 'otomatis' || hargaMode === 'manual'">
+      <label for="currency" class="block text-gray-700 text-sm font-semibold mb-1">Pilih Mata Uang:</label>
+      <select
+        id="currency"
+        v-model="selectedCurrency"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+        :disabled="hargaMode === 'manual'"
+      >
+        <option value="USD">Dollar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+      </select>
+
+      <label :for="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Harga {{ selectedCurrency === 'USD' ? 'Dollar' : 'Euro' }}:</label>
+      <div class="flex">
+        <input
+          type="number"
+          :id="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'"
+          v-model="currencyPrice"
+          step="0.01"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+          :disabled="hargaMode === 'manual'"
+        />
+        <span class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-500 text-sm">
+          {{ selectedCurrency === 'USD' ? '$' : '€' }}
+        </span>
+      </div>
+
+      <label for="priceIDR" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Setelah Konversi ke IDR:</label>
+      <input
+        type="text"
+        id="priceIDR"
+        :value="formatCurrency(convertedPriceIDR)"
+        readonly
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 text-sm"
+        :disabled="hargaMode === 'manual'"
+      />
+
+      <label for="kualitasCoverInput" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Kualitas Cover (1-100):</label>
+      <div class="flex">
+        <input
+          type="number"
+          id="kualitasCoverInput"
+          v-model.number="kualitasCoverInput"
+          min="1"
+          max="100"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+          :disabled="hargaMode === 'manual'"
+        />
+        <span class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-500 text-sm">
+          %
+        </span>
+      </div>
+
+      <label for="finalPriceOtomatis" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Harga Akhir:</label>
+      <input
+        type="text"
+        id="finalPriceOtomatis"
+        :value="formatCurrency(finalPrice)"
+        readonly
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 text-sm"
+        :disabled="hargaMode === 'manual'"
+      />
+    </div>
+  </div>
+
+  <div class="border rounded p-4" :class="{ 'bg-gray-100': hargaMode === 'otomatis' }">
+    <label class="block font-bold mb-2">
+      <input type="radio" v-model="hargaMode" value="manual" class="mr-2"> Add Harga Manual
+    </label>
+    <div v-if="hargaMode === 'manual' || hargaMode === 'otomatis'">
+      <label for="hargaManual" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Masukkan Harga Manual (IDR):</label>
+      <div class="flex">
+        <input
+          type="number"
+          id="hargaManual"
+          v-model.number="hargaManual"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+          :disabled="hargaMode === 'otomatis'"
+        />
+        <span class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-500 text-sm">
+          Rp
+        </span>
+      </div>
+
+      <label for="finalPriceManual" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Harga Akhir:</label>
+      <input
+        type="text"
+        id="finalPriceManual"
+        :value="formatCurrency(finalPrice)"
+        readonly
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 text-sm"
+        :disabled="hargaMode === 'otomatis'"
+      />
+    </div>
+  </div>
+</div>
+  
           <button
-            @click="saveToIndexedDB"
-            :disabled="!price"
+            @click="saveToIndexedDBWithCalculation"
+            :disabled="!currencyPrice || !coverQuality"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
           >
             Simpan
@@ -76,8 +319,8 @@
         <h2 class="text-lg font-semibold mb-4">Lihat Data Tersimpan</h2>
         <table v-if="storedData.length > 0" class="w-full border-collapse">
           <thead>
-            <tr class="bg-gray-100">
-              <th class="border border-gray-300 p-2 text-left">No</th>
+            <tr class="bg-yellow-400">
+              <th class="border border-blue-300 p-2 text-left">No</th>
               <th class="border border-gray-300 p-2 text-left">Catalog No</th>
               <th class="border border-gray-300 p-2 text-left">Artist</th>
               <th class="border border-gray-300 p-2 text-left">Title</th>
@@ -85,7 +328,12 @@
               <th class="border border-gray-300 p-2 text-left">Format</th>
               <th class="border border-gray-300 p-2 text-left">Label</th>
               <th class="border border-gray-300 p-2 text-left">Released</th>
-              <th class="border border-gray-300 p-2 text-left">Price</th>
+              <th class="border border-gray-300 p-2 text-left">Harga Asli</th>
+              <th class="border border-gray-300 p-2 text-left">Harga Toko</th>
+              <th class="border border-gray-300 p-2 text-left">Harga Discogs</th>
+              <th class="border border-gray-300 p-2 text-left">Kualitas Cover</th>
+              <th class="border border-gray-300 p-2 text-left">Hasil Kalkulasi</th>
+              <th class="border border-gray-300 p-2 text-left">Harga Final</th>
               <th class="border border-gray-300 p-2 text-left">Aksi</th>
             </tr>
           </thead>
@@ -99,7 +347,12 @@
               <td class="border border-gray-300 p-2 text-black">{{ item.data.FORMAT }}</td>
               <td class="border border-gray-300 p-2 text-black">{{ item.data.LABEL }}</td>
               <td class="border border-gray-300 p-2 text-black">{{ item.data.RELEASED }}</td>
-              <td class="border border-gray-300 p-2 text-black">{{ item.data.PRICE }}</td>
+              <td class="border border-gray-300 p-2 text-black">{{ formatCurrency(item.data.PRICE_ORIGINAL) }} {{ item.data.CURRENCY }}</td>
+              <td class="border border-gray-300 p-2 text-black">{{ formatCurrency(item.data.PRICE_TOKO) }}</td>
+              <td class="border border-gray-300 p-2 text-black">{{ formatCurrency(item.data.PRICE_DISCOGS) }}</td>
+              <td class="border border-gray-300 p-2 text-black">{{ item.data.COVER_QUALITY }}</td>
+              <td class="border border-gray-300 p-2 text-black">{{ formatCurrency(item.data.CALCULATED_PRICE) }}</td>
+              <td class="border border-gray-300 p-2 text-black">{{ formatCurrency(item.data.FINAL_PRICE) }}</td>
               <td class="border border-gray-300 p-2">
                 <button @click="confirmDelete(item.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">Hapus</button>
               </td>
@@ -125,37 +378,79 @@
       </div>
     </div>
   </template>
+  
 
 <script>
 export default {
   data() {
     return {
+      hargaMode: 'otomatis', // Bisa 'otomatis' atau 'manual'
+      hargaManual: null,
+      kualitasCoverInput: null, // Untuk input skala 1-100
       activeTab: 'input',
       db: null,
       objectStoreName: 'discogsReleases',
       discogsCode: '',
       releaseInfo: null,
       fetchError: null,
-      price: null,
+      selectedCurrency: 'USD',
+      currencyPrice: null,
+      dollarToRupiahRate: null,
+      euroToRupiahRate: null,
+      convertedPriceIDR: null,
+      coverQuality: null,
+      calculatedPrice: null,
+      finalPrice: null,
       storedData: [],
       notification: {
         show: false,
         type: '',
         message: '',
       },
-      newRecordCount: 0, // State untuk badge notifikasi
+      newRecordCount: 0,
     };
   },
   async mounted() {
     await this.initDatabase();
     await this.loadStoredData();
+    await this.fetchExchangeRates();
+  },
+  watch: {
+    currencyPrice() {
+      this.convertCurrency();
+      this.calculatePrices();
+    },
+    selectedCurrency() {
+      this.currencyPrice = null;
+      this.convertedPriceIDR = null;
+      this.calculatePrices();
+    },
+    coverQuality() {
+      this.calculatePrices();
+    },
+    releaseInfo(newVal) {
+      if (newVal && newVal.format && newVal.format.includes('LP')) {
+        this.hargaTokoOtomatis = 150000;
+      } else {
+        this.hargaTokoOtomatis = 100000;
+      }
+      this.calculatePrices();
+    },
+  },
+  computed: {
+    hargaTokoOtomatis() {
+      if (this.releaseInfo && this.releaseInfo.format) {
+        return this.releaseInfo.format.includes('LP') ? 150000 : 100000;
+      }
+      return 0;
+    },
   },
   methods: {
     setActiveTab(tabName) {
       this.activeTab = tabName;
       console.log('activeTab:', this.activeTab);
       if (tabName === 'view') {
-        this.newRecordCount = 0; // Reset badge saat tab dilihat
+        this.newRecordCount = 0;
       }
     },
     async initDatabase() {
@@ -222,8 +517,45 @@ export default {
         this.showNotification('error', error.message);
       }
     },
-    async saveToIndexedDB() {
-      if (this.releaseInfo && this.price !== null) {
+    async fetchExchangeRates() {
+  this.dollarToRupiahRate = 16000; // Hardcode nilai tukar USD ke IDR
+  this.euroToRupiahRate = 17500;   // Hardcode nilai tukar EUR ke IDR
+
+  console.log('Nilai Tukar USD ke IDR (Hardcoded):', this.dollarToRupiahRate);
+  console.log('Nilai Tukar EUR ke IDR (Hardcoded):', this.euroToRupiahRate);
+},
+    convertCurrency() {
+      if (this.currencyPrice !== null) {
+        if (this.selectedCurrency === 'USD' && this.dollarToRupiahRate !== null) {
+          this.convertedPriceIDR = this.currencyPrice * this.dollarToRupiahRate;
+        } else if (this.selectedCurrency === 'EUR' && this.euroToRupiahRate !== null) {
+          this.convertedPriceIDR = this.currencyPrice * this.euroToRupiahRate;
+        } else {
+          this.convertedPriceIDR = null;
+        }
+      } else {
+        this.convertedPriceIDR = null;
+      }
+    },
+    calculatePrices() {
+      if (this.convertedPriceIDR !== null && this.coverQuality !== null) {
+        const hargaToko = this.hargaTokoOtomatis;
+        const hargaDiscogs = this.convertedPriceIDR;
+
+        let hargaTengah = hargaToko;
+        if (hargaDiscogs > hargaToko) {
+          hargaTengah = hargaToko + (hargaDiscogs - hargaToko) / 2;
+        }
+
+        this.calculatedPrice = hargaTengah * this.coverQuality;
+        this.finalPrice = Math.round(this.calculatedPrice / 5000) * 5000;
+      } else {
+        this.calculatedPrice = null;
+        this.finalPrice = null;
+      }
+    },
+    async saveToIndexedDBWithCalculation() {
+      if (this.releaseInfo && this.convertedPriceIDR !== null && this.coverQuality !== null) {
         const recordToSave = {
           'CATALOG NO': this.releaseInfo.catalog_number,
           'ARTIST': this.releaseInfo.artist,
@@ -232,7 +564,13 @@ export default {
           'FORMAT': Array.isArray(this.releaseInfo.format) ? this.releaseInfo.format.join(', ') : this.releaseInfo.format,
           'LABEL': Array.isArray(this.releaseInfo.label) ? this.releaseInfo.label.join(', ') : this.releaseInfo.label,
           'RELEASED': this.releaseInfo.released_year,
-          'PRICE': parseFloat(this.price),
+          'PRICE_ORIGINAL': parseFloat(this.currencyPrice),
+          'CURRENCY': this.selectedCurrency,
+          'PRICE_TOKO': this.hargaTokoOtomatis,
+          'PRICE_DISCOGS': this.convertedPriceIDR,
+          'COVER_QUALITY': this.coverQuality,
+          'CALCULATED_PRICE': this.calculatedPrice,
+          'FINAL_PRICE': this.finalPrice,
         };
 
         return new Promise((resolve, reject) => {
@@ -243,10 +581,16 @@ export default {
           addRequest.onsuccess = async () => {
             this.discogsCode = '';
             this.releaseInfo = null;
-            this.price = null;
+            this.selectedCurrency = 'USD';
+            this.currencyPrice = null;
+            this.convertedPriceIDR = null;
+            this.coverQuality = null;
+            this.calculatedPrice = null;
+            this.finalPrice = null;
             await this.loadStoredData();
-            this.newRecordCount++; // Tingkatkan counter badge
+            this.newRecordCount++;
             this.showNotification('success', 'Data berhasil disimpan!');
+            this.activeTab = 'view';
             resolve();
           };
 
@@ -256,9 +600,15 @@ export default {
             reject(event.target.error);
           };
         });
-      } else if (!this.price) {
-        this.showNotification('warning', 'Harap masukkan harga sebelum menyimpan.');
+      } else {
+        this.showNotification('warning', 'Harap isi harga dan kualitas cover.');
       }
+    },
+    formatCurrency(value) {
+      if (value !== null) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+      }
+      return '';
     },
     async deleteRecord(id) {
       return new Promise((resolve, reject) => {
@@ -291,8 +641,7 @@ export default {
       }
 
       const headerRows = [
-        'NO (D00001),CATALOG NO,ARTIST,TITLE,GENRE,FORMAT,LABEL,RELEASED,CONDITION,,PRICE,,,,,',
-        ',,,,,,,,MEDIA,COVER,,,,,,',
+        'NO (D00001),CATALOG NO,ARTIST,TITLE,GENRE,FORMAT,LABEL,RELEASED,HARGA ASLI,MATA UANG,HARGA TOKO,HARGA DISCOGS,KUALITAS COVER,HASIL KALKULASI,HARGA FINAL',
       ];
       let csvContent = headerRows.join('\n') + '\n';
 
@@ -307,10 +656,13 @@ export default {
           data.FORMAT || '',
           data.LABEL || '',
           data.RELEASED || '',
-          '',
-          '',
-          data.PRICE || '',
-          '', '', '', '', '',
+          data.PRICE_ORIGINAL || '',
+          data.CURRENCY || '',
+          data.PRICE_TOKO || '',
+          data.PRICE_DISCOGS || '',
+          data.COVER_QUALITY || '',
+          data.CALCULATED_PRICE || '',
+          data.FINAL_PRICE || '',
         ];
         csvContent += row.join(',') + '\n';
       });
@@ -362,6 +714,12 @@ export default {
       this.notification.show = false;
       this.notification.message = '';
       this.notification.type = '';
+    },
+    formatCurrency(value) {
+      if (value !== null) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+      }
+      return '';
     },
   },
 };
