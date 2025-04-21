@@ -511,9 +511,9 @@ export default {
         `D${String(index + 1).padStart(5, '0')}`,
         Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(';') : data['CATALOG NO'] || '',
         `"${data.ARTIST || ''}"`,
-        `"${data.TITLE || ''}"`,
-        Array.isArray(data.GENRE) ? data.GENRE.join(';') : '', // Tangani GENRE sebagai array
-        Array.isArray(data.FORMAT) ? data.FORMAT.join(';') : '', // Tangani FORMAT sebagai array
+        `"${data.TITLE || ''}"`,  
+          data.GENRE || '', // Langsung ambil nilai string
+          data.FORMAT || '', // Langsung ambil nilai string
         data.LABEL || '',
         data.RELEASED || '',
         data.MEDIA || '',
