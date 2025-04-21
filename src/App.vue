@@ -1,6 +1,5 @@
 <script setup>
 import DiscogsInput from './components/DiscogsInput.vue';
-import DiscogsInputTest from './components/DiscogInputTest.vue';
 // import AlbumInfo from './components/AlbumInfo.vue';
 // import ScratchCode from './components/ScratchCode.vue';
 </script>
