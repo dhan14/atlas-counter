@@ -513,10 +513,10 @@ export default {
         `"${data.TITLE || ''}"`,  
         `"${Array.isArray(data.GENRE) ? data.GENRE.join(';') : data.GENRE || ''}"`, // Tambah kutip
         `"${Array.isArray(data.FORMAT) ? data.FORMAT.join(';') : data.FORMAT || ''}"`, // Tambah kutip
-        data.LABEL || '',
-        data.RELEASED || '',
-        data.MEDIA || '',
-        data.COVER_CONDITION || '', // Gunakan nama properti yang benar
+        `"${data.LABEL || ''}"`, // Tambah kutip
+        `"${data.RELEASED || ''}"`, // Tambah kutip
+        `"${data.MEDIA || ''}"`, // Tambah kutip
+        `"${data.COVER_CONDITION || ''}"`, // Tambah kutip
         data.HARGA_AKHIR || '',    // Gunakan nama properti yang benar
 ];
         csvContent += row.join(',') + '\n';
