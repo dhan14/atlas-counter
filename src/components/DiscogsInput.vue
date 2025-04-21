@@ -499,28 +499,35 @@ export default {
       }
 
       const headerRows = [
-  'NO (D00001),CATALOG NO,ARTIST,TITLE,GENRE,FORMAT,LABEL,RELEASED,CONDITION (COVER),PRICE',
+  'NO,CATALOG NO,ARTIST,TITLE,GENRE,FORMAT,LABEL,RELEASED,CONDITION (MEDIA) (COVER),PRICE',
 ];
       let csvContent = headerRows.join('\n') + '\n';
 
       this.storedData.forEach((item, index) => {
         const data = item.data;
         const row = [
-  `D${String(index + 1).padStart(5, '0')}`,
-  data['CATALOG NO'] || '',
-  `"${data.ARTIST || ''}"`,
-  `"${data.TITLE || ''}"`,
-  data.GENRE || '',
-  data.FORMAT || '',
-  data.LABEL || '',
-  data.RELEASED || '',
-  data.COVER_CONDITION || '', // Ambil kondisi cover
-  data.HARGA_AKHIR || '',    // Ambil harga akhir
+        `D${String(index + 1).padStart(5, '0')}`,
+        Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(';') : data['CATALOG NO'] || '',
+        `"${data.ARTIST || ''}"`,
+        `"${data.TITLE || ''}"`,
+        Array.isArray(data.GENRE) ? data.GENRE.join(';') : '', // Tangani GENRE sebagai array
+        Array.isArray(data.FORMAT) ? data.FORMAT.join(';') : '', // Tangani FORMAT sebagai array
+        data.LABEL || '',
+        data.RELEASED || '',
+        data.COVER_CONDITION || '', // Gunakan nama properti yang benar
+        data.HARGA_AKHIR || '',    // Gunakan nama properti yang benar
 ];
         csvContent += row.join(',') + '\n';
       });
+      
+        // Dapatkan tanggal hari ini
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // Month dimulai dari 0
+      const day = String(today.getDate()).padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
 
-      const filename = 'discogs_records.csv';
+      const filename = `discogs_records_${dateString}.csv`;
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
