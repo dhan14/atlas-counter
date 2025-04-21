@@ -505,6 +505,8 @@ export default {
 
       this.storedData.forEach((item, index) => {
         const data = item.data;
+        console.log('Isi item.data:', data);   //debugging
+        
         const row = [
         `D${String(index + 1).padStart(5, '0')}`,
         Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(';') : data['CATALOG NO'] || '',
