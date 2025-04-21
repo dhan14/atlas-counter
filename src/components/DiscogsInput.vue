@@ -505,15 +505,14 @@ export default {
 
       this.storedData.forEach((item, index) => {
         const data = item.data;
-        console.log('Isi item.data:', data);   //debugging
         
         const row = [
         `D${String(index + 1).padStart(5, '0')}`,
         Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(';') : data['CATALOG NO'] || '',
         `"${data.ARTIST || ''}"`,
         `"${data.TITLE || ''}"`,  
-          data.GENRE || '', // Langsung ambil nilai string
-          data.FORMAT || '', // Langsung ambil nilai string
+        `"${Array.isArray(data.GENRE) ? data.GENRE.join(';') : data.GENRE || ''}"`, // Tambah kutip
+        `"${Array.isArray(data.FORMAT) ? data.FORMAT.join(';') : data.FORMAT || ''}"`, // Tambah kutip
         data.LABEL || '',
         data.RELEASED || '',
         data.MEDIA || '',
