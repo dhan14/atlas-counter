@@ -375,7 +375,7 @@ export default {
     },
     async fetchExchangeRates() {
       this.dollarToRupiahRate = 16000; // Hardcode nilai tukar USD ke IDR
-      this.euroToRupiahRate = 17500;   // Hardcode nilai tukar EUR ke IDR
+      this.euroToRupiahRate = 19000;   // Hardcode nilai tukar EUR ke IDR
 
       console.log('Nilai Tukar USD ke IDR (Hardcoded):', this.dollarToRupiahRate);
       console.log('Nilai Tukar EUR ke IDR (Hardcoded):', this.euroToRupiahRate);
