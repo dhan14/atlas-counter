@@ -499,8 +499,8 @@ export default {
       }
 
       const headerRows = [
-  'NO,CATALOG NO,ARTIST,TITLE,GENRE,FORMAT,LABEL,RELEASED,CONDITION (MEDIA) (COVER),PRICE',
-];
+  'NO,CATALOG NO,ARTIST,TITLE,GENRE,FORMAT,LABEL,RELEASED,MEDIA,COVER,PRICE',
+    ];
       let csvContent = headerRows.join('\n') + '\n';
 
       this.storedData.forEach((item, index) => {
@@ -514,6 +514,7 @@ export default {
         Array.isArray(data.FORMAT) ? data.FORMAT.join(';') : '', // Tangani FORMAT sebagai array
         data.LABEL || '',
         data.RELEASED || '',
+        data.MEDIA || '',
         data.COVER_CONDITION || '', // Gunakan nama properti yang benar
         data.HARGA_AKHIR || '',    // Gunakan nama properti yang benar
 ];
