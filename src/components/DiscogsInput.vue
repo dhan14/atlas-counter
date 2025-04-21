@@ -493,54 +493,52 @@ export default {
       }
     },
     async exportToCsv() {
-      if (this.storedData.length === 0) {
-        this.showNotification('warning', 'Tidak ada data untuk diekspor.');
-        return;
-      }
+    if (this.storedData.length === 0) {
+      this.showNotification('warning', 'Tidak ada data untuk diekspor.');
+      return;
+    }
 
-      const headerRows = [
-  'NO,CATALOG NO,ARTIST,TITLE,GENRE,FORMAT,LABEL,RELEASED,MEDIA,COVER,PRICE',
+    const headerRows = [
+      'NO;CATALOG NO;ARTIST;TITLE;GENRE;FORMAT;LABEL;RELEASED;MEDIA;COVER;PRICE', // Pemisah header jadi titik koma
     ];
-      let csvContent = headerRows.join('\n') + '\n';
+    let csvContent = headerRows.join('\n') + '\n';
 
-      this.storedData.forEach((item, index) => {
-        const data = item.data;
-        
-        const row = [
+    this.storedData.forEach((item, index) => {
+      const data = item.data;
+      const row = [
         `D${String(index + 1).padStart(5, '0')}`,
-        Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(';') : data['CATALOG NO'] || '',
+        `"${Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(',') : data['CATALOG NO'] || ''}"`, // Koma di dalam, diapit kutip
         `"${data.ARTIST || ''}"`,
-        `"${data.TITLE || ''}"`,  
-        `"${Array.isArray(data.GENRE) ? data.GENRE.join(';') : data.GENRE || ''}"`, // Tambah kutip
-        `"${Array.isArray(data.FORMAT) ? data.FORMAT.join(';') : data.FORMAT || ''}"`, // Tambah kutip
-        `"${data.LABEL || ''}"`, // Tambah kutip
-        `"${data.RELEASED || ''}"`, // Tambah kutip
-        `"${data.MEDIA || ''}"`, // Tambah kutip
-        `"${data.COVER_CONDITION || ''}"`, // Tambah kutip
-        data.HARGA_AKHIR || '',    // Gunakan nama properti yang benar
-];
-        csvContent += row.join(',') + '\n';
-      });
-      
-        // Dapatkan tanggal hari ini
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0'); // Month dimulai dari 0
-      const day = String(today.getDate()).padStart(2, '0');
-      const dateString = `${year}-${month}-${day}`;
+        `"${data.TITLE || ''}"`,
+        `"${Array.isArray(data.GENRE) ? data.GENRE.join(',') : data.GENRE || ''}"`, // Koma di dalam, diapit kutip
+        `"${Array.isArray(data.FORMAT) ? data.FORMAT.join(',') : data.FORMAT || ''}"`, // Koma di dalam, diapit kutip
+        `"${data.LABEL || ''}"`,
+        `"${data.RELEASED || ''}"`,
+        `"${data.MEDIA || ''}"`,
+        `"${data.COVER_CONDITION || ''}"`,
+        data.HARGA_AKHIR || '', // Harga tetap tanpa kutip
+      ];
+      csvContent += row.join(';') + '\n'; // Pemisah baris jadi titik koma
+    });
 
-      const filename = `discogs_records_${dateString}.csv`;
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      this.showNotification('success', 'Data berhasil diekspor ke CSV!');
-    },
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const dateString = `${year}-${month}-${day}`;
+    const filename = `discogs_records_${dateString}.csv`; // Nama file tetap .csv
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    this.showNotification('success', 'Data berhasil diekspor ke CSV (pemisah titik koma)!');
+  },
     async clearIndexedDB() {
       if (confirm('Apakah Anda yakin ingin menghapus semua data?')) {
         return new Promise((resolve, reject) => {
