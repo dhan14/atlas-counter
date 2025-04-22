@@ -1,7 +1,5 @@
   <template>
-    <div>
       <div class="bg-white rounded-lg shadow-md p-6 mb-4">
-        <h2 class="text-lg font-semibold mb-4">Aplikasi Input Data Discogs</h2>
         <div class="tabs">
           <button :class="{ active: activeTab === 'input' }" @click="setActiveTab('input')">Input Data</button>
           <button :class="{ active: activeTab === 'view' }" @click="setActiveTab('view')">
@@ -16,9 +14,8 @@
             notification.message }}</div>
           <div v-if="notification.show && notification.type === 'error'" class="notification error">{{
             notification.message }}</div>
-          <h2 class="text-lg font-semibold mb-4">Masukkan ID Album Discogs</h2>
+          <h2 class="text-lg font-semibold mb-4 text-gray-400">Masukkan ID Album Discogs</h2>
           <div class="mb-4">
-            <label for="discogsCode" class="block text-gray-700 text-sm font-bold mb-2">Kode Discogs:</label>
             <label for="discogsCode" class="block text-gray-700 text-sm font-bold mb-2">
               Contoh, Salin kode yang di Highlight ke form di bawah:
               <a href="https://www.discogs.com/release/" class="text-gray-400">https://www.discogs.com/release/</a>
@@ -36,28 +33,47 @@
   
           <div v-if="releaseInfo" class="mt-4">
             <h3>Preview Data</h3>
-            <p class="text-black"><strong>CATALOG NO:</strong> {{ releaseInfo.catalog_number }}</p>
-            <p class="text-black"><strong>ARTIST:</strong> {{ releaseInfo.artist }}</p>
-            <p class="text-black"><strong>TITLE:</strong> {{ releaseInfo.title }}</p>
-            <p class="text-black"><strong>GENRE:</strong> {{ releaseInfo.genre ? releaseInfo.genre.join(', ') : '' }}</p>
-            <p class="text-black"><strong>FORMAT:</strong> {{ releaseInfo.format ? releaseInfo.format.join(', ') : '' }}
-            </p>
-            <p class="text-black"><strong>LABEL:</strong> {{ releaseInfo.label ? releaseInfo.label.join(', ') : '' }}</p>
-            <p class="text-black"><strong>RELEASED:</strong> {{ releaseInfo.released_year }}</p>
-            <div class="mt-4">
-        <h3 class="text-gray-700">Kondisi Cover</h3>
-        <div class="flex items-center mb-2">
-          <input type="radio" id="coverConditionCover" v-model="coverCondition" value="Cover" class="mr-2">
-          <label class="text-gray-700" for="coverConditionCover">Cover</label>
-        </div>
-        <div class="flex items-center">
-          <input type="radio" id="coverConditionNonCover" v-model="coverCondition" value="Non Cover" class="mr-2">
-          <label class="text-gray-700" for="coverConditionNonCover">Non Cover</label>
-        </div>
-      </div>
-            
+            <div class="flex mx-8">
+              <div class="w-1/3">
+                <p class="text-black font-semibold text-left">CATALOG NO</p>
+                <p class="text-black font-semibold text-left">ARTIST</p>
+                <p class="text-black font-semibold text-left">TITLE</p>
+                <p class="text-black font-semibold text-left">GENRE</p>
+                <p class="text-black font-semibold text-left">FORMAT</p>
+                <p class="text-black font-semibold text-left">LABEL</p>
+                <p class="text-black font-semibold text-left">RELEASED</p>
+                <p class="text-black font-semibold text-left">KONDISI COVER</p>
+              </div>
+              <div class="w-1/3 pr-3">
+                <p class="text-black font-semibold text-right">:</p>
+                <p class="text-black font-semibold text-right">:</p>
+                <p class="text-black font-semibold text-right">:</p>
+                <p class="text-black font-semibold text-right">:</p>
+                <p class="text-black font-semibold text-right">:</p>
+                <p class="text-black font-semibold text-right">:</p>
+                <p class="text-black font-semibold text-right">:</p>
+                <p class="text-black font-semibold text-right">:</p>
+              </div>
+              <div class="w-1/3">
+                <p class="text-black text-left">{{ releaseInfo.catalog_number }}</p>
+                <p class="text-black text-left">{{ releaseInfo.artist }}</p>
+                <p class="text-black text-left">{{ releaseInfo.title }}</p>
+                <p class="text-black text-left">{{ releaseInfo.genre ? releaseInfo.genre.join(', ') : '' }}</p>
+                <p class="text-black text-left">{{ releaseInfo.format ? releaseInfo.format.join(', ') : '' }}</p>
+                <p class="text-black text-left">{{ releaseInfo.label && releaseInfo.label.length > 0 ? releaseInfo.label[0] : '' }}</p>
+                <p class="text-black text-left">{{ releaseInfo.released_year }}</p>
+                <div class="flex items-center mb-2">
+                <input type="radio" id="coverConditionCover" v-model="coverCondition" value="Cover" class="mr-2">
+                  <label class="text-gray-700" for="coverConditionCover">Cover</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="coverConditionNonCover" v-model="coverCondition" value="Non Cover" class="mr-2">
+                  <label class="text-gray-700" for="coverConditionNonCover">Non Cover</label>
+                </div>
+              </div>
+            </div>            
   
-            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="mt-7 grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- INPUT HARGA OTOMATIS -->
               <div class="border rounded p-4" :class="{ 'bg-gray-400': hargaMode === 'otomatis' }">
                 <label class="block font-bold mb-2 text-gray-700">
@@ -139,7 +155,7 @@
               </div>
             </div>
   
-            <button @click="saveToIndexedDBWithCalculation" :disabled="!currencyPrice || !coverQuality"
+            <button @click="saveToIndexedDBWithCalculation"
               class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">
               Simpan
             </button>
@@ -184,7 +200,7 @@
         <td class="border border-gray-300 p-2 text-black">{{ item.data.TITLE }}</td>
         <td class="border border-gray-300 p-2 text-black">{{ item.data.GENRE }}</td>
         <td class="border border-gray-300 p-2 text-black">{{ item.data.FORMAT }}</td>
-        <td class="border border-gray-300 p-2 text-black">{{ item.data.LABEL }}</td>
+        <td class="border border-gray-300 p-2 text-black">{{ item.data.LABEL && item.data.LABEL.length > 0 ? item.data.LABEL[0] : '' }}</td>
         <td class="border border-gray-300 p-2 text-black">{{ item.data.RELEASED }}</td>
         <td class="border border-gray-300 p-2 text-black"></td>
         <td class="border border-gray-300 p-2 text-black">{{ item.data.COVER_CONDITION }}</td>
@@ -208,7 +224,6 @@
             Kosongkan Data
           </button>
         </div>
-    </div>
   </template>
 
 
@@ -294,17 +309,22 @@ export default {
     },
   },
   computed: {
-    hargaTokoOtomatis() {
-      if (this.releaseInfo && this.releaseInfo.format) {
-        return this.releaseInfo.format.includes('LP') ? 150000 : 100000;
+  hargaTokoOtomatis() {
+    if (this.releaseInfo && typeof this.releaseInfo.format === 'string') {
+      const format = this.releaseInfo.format.trim();
+
+      if (format.startsWith('LP')) {
+        return 150000;
+      } else if (format.startsWith('12"')) {
+        return 100000;
       }
-      return 0;
-    },
+    }
+    return 0; // Nilai default jika releaseInfo atau format tidak valid
   },
+},
   methods: {
     setActiveTab(tabName) {
       this.activeTab = tabName;
-      console.log('activeTab:', this.activeTab);
       if (tabName === 'view') {
         this.newRecordCount = 0;
       }
@@ -344,7 +364,11 @@ export default {
               ...item.data,
               GENRE: item.data.GENRE ? item.data.GENRE : [],
               FORMAT: item.data.FORMAT ? item.data.FORMAT : [],
-              LABEL: item.data.LABEL ? item.data.LABEL : [],
+              LABEL: item.data.LABEL
+              ? Array.isArray(item.data.LABEL) && item.data.LABEL.length > 0
+                ? [item.data.LABEL[0]]
+                : [item.data.LABEL] // Jika bukan array atau array kosong, jadikan array dengan satu elemen (string atau null/undefined)
+              : [],
             },
           }));
           resolve();
@@ -376,9 +400,6 @@ export default {
     async fetchExchangeRates() {
       this.dollarToRupiahRate = 16000; // Hardcode nilai tukar USD ke IDR
       this.euroToRupiahRate = 19000;   // Hardcode nilai tukar EUR ke IDR
-
-      console.log('Nilai Tukar USD ke IDR (Hardcoded):', this.dollarToRupiahRate);
-      console.log('Nilai Tukar EUR ke IDR (Hardcoded):', this.euroToRupiahRate);
     },
     convertCurrency() {
       if (this.currencyPrice !== null) {
@@ -411,57 +432,74 @@ export default {
     //   }
     // },
     async saveToIndexedDBWithCalculation() {
-      if (this.releaseInfo && this.convertedPriceIDR !== null && this.coverQuality !== null) {
-        const recordToSave = {
-  'CATALOG NO': this.releaseInfo ? this.releaseInfo.catalog_number : '',
-  'ARTIST': this.releaseInfo ? this.releaseInfo.artist : '',
-  'TITLE': this.releaseInfo ? this.releaseInfo.title : '',
-  'GENRE': this.releaseInfo && Array.isArray(this.releaseInfo.genre) ? this.releaseInfo.genre.join(', ') : '',
-  'FORMAT': this.releaseInfo && Array.isArray(this.releaseInfo.format) ? this.releaseInfo.format.join(', ') : '',
-  'LABEL': this.releaseInfo && Array.isArray(this.releaseInfo.label) ? this.releaseInfo.label.join(', ') : '',
-  'RELEASED': this.releaseInfo ? this.releaseInfo.released_year : '',
-  'HARGA_MODE': this.hargaMode,
-  'HARGA_ASLI': this.hargaMode === 'otomatis' ? parseFloat(this.currencyPrice) : null,
-  'MATA_UANG': this.hargaMode === 'otomatis' ? this.selectedCurrency : null,
-  'HARGA_MANUAL': this.hargaMode === 'manual' ? parseFloat(this.hargaManual) : null,
-  'HARGA_TOKO': this.hargaTokoOtomatis,
-  'HARGA_DISCOGS': this.hargaMode === 'otomatis' ? this.convertedPriceIDR : null,
-  'KUALITAS_COVER': this.coverQuality,
-  'HARGA_AKHIR': priceToSave,
-  'COVER_CONDITION': this.coverCondition,
-};
+    let priceToSave;
 
-        return new Promise((resolve, reject) => {
-          const transaction = this.db.transaction(this.objectStoreName, 'readwrite');
-          const objectStore = transaction.objectStore(this.objectStoreName);
-          const addRequest = objectStore.add({ data: recordToSave });
-
-          addRequest.onsuccess = async () => {
-            this.discogsCode = '';
-            this.releaseInfo = null;
-            this.selectedCurrency = 'USD';
-            this.currencyPrice = null;
-            this.convertedPriceIDR = null;
-            this.coverQuality = null;
-            this.calculatedPrice = null;
-            this.finalPrice = null;
-            await this.loadStoredData();
-            this.newRecordCount++;
-            this.showNotification('success', 'Data berhasil disimpan!');
-            this.activeTab = 'view';
-            resolve();
-          };
-
-          addRequest.onerror = (event) => {
-            console.error('Gagal menyimpan ke IndexedDB:', event.target.error);
-            this.showNotification('error', 'Gagal menyimpan data.');
-            reject(event.target.error);
-          };
-        });
+    if (this.releaseInfo && this.coverQuality !== null && (this.hargaMode === 'manual' || this.convertedPriceIDR !== null)) {
+      if (this.hargaMode === 'manual') {
+        priceToSave = parseFloat(this.hargaManual);
+        if (isNaN(priceToSave)) {
+          this.showNotification('warning', 'Harga manual harus berupa angka yang valid.');
+          return; // Hentikan penyimpanan jika harga manual tidak valid
+        }
+      } else if (this.hargaMode === 'otomatis') {
+        priceToSave = this.hargaTokoOtomatis * this.convertedPriceIDR;
       } else {
-        this.showNotification('warning', 'Harap isi harga dan kualitas cover.');
+        console.error('Mode harga tidak valid.');
+        this.showNotification('error', 'Mode harga tidak valid.');
+        return;
       }
-    },
+
+      const recordToSave = {
+        'CATALOG NO': this.releaseInfo ? this.releaseInfo.catalog_number : '',
+        'ARTIST': this.releaseInfo ? this.releaseInfo.artist : '',
+        'TITLE': this.releaseInfo ? this.releaseInfo.title : '',
+        'GENRE': this.releaseInfo && Array.isArray(this.releaseInfo.genre) ? this.releaseInfo.genre.join(', ') : '',
+        'FORMAT': this.releaseInfo && Array.isArray(this.releaseInfo.format) ? this.releaseInfo.format.join(', ') : '',
+        'LABEL': this.releaseInfo && Array.isArray(this.releaseInfo.label) ? this.releaseInfo.label.join(', ') : '',
+        'RELEASED': this.releaseInfo ? this.releaseInfo.released_year : '',
+        'HARGA_MODE': this.hargaMode,
+        'HARGA_ASLI': this.hargaMode === 'otomatis' ? parseFloat(this.currencyPrice) : null,
+        'MATA_UANG': this.hargaMode === 'otomatis' ? this.selectedCurrency : null,
+        'HARGA_MANUAL': this.hargaMode === 'manual' ? parseFloat(this.hargaManual) : null,
+        'HARGA_TOKO': this.hargaTokoOtomatis,
+        'HARGA_DISCOGS': this.hargaMode === 'otomatis' ? this.convertedPriceIDR : null,
+        'KUALITAS_COVER': this.coverQuality,
+        'HARGA_AKHIR': priceToSave,
+        'COVER_CONDITION': this.coverCondition,
+      };
+
+      return new Promise((resolve, reject) => {
+        const transaction = this.db.transaction(this.objectStoreName, 'readwrite');
+        const objectStore = transaction.objectStore(this.objectStoreName);
+        const addRequest = objectStore.add({ data: recordToSave });
+
+        addRequest.onsuccess = async () => {
+          this.discogsCode = '';
+          this.releaseInfo = null;
+          this.selectedCurrency = 'USD';
+          this.currencyPrice = null;
+          this.convertedPriceIDR = null;
+          this.coverQuality = null;
+          this.calculatedPrice = null;
+          this.finalPrice = null;
+          await this.loadStoredData();
+          this.newRecordCount++;
+          this.showNotification('success', 'Data berhasil disimpan!');
+          this.activeTab = 'view';
+          resolve();
+        };
+
+        addRequest.onerror = (event) => {
+          console.error('Gagal menyimpan ke IndexedDB:', event.target.error);
+          this.showNotification('error', 'Gagal menyimpan data.');
+          reject(event.target.error);
+        };
+      });
+    } else {
+      console.warn('Kondisi IF utama TIDAK terpenuhi.');
+      this.showNotification('warning', 'Harap isi harga dan kualitas cover.');
+    }
+  },
     formatCurrency(value) {
       if (value !== null) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
@@ -506,17 +544,17 @@ export default {
     this.storedData.forEach((item, index) => {
       const data = item.data;
       const row = [
-        `D${String(index + 1).padStart(5, '0')}`,
-        `"${Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(',') : data['CATALOG NO'] || ''}"`, // Koma di dalam, diapit kutip
+        `${index + 1}`,
+        `"${Array.isArray(data['CATALOG NO']) ? data['CATALOG NO'].join(',') : data['CATALOG NO'] || ''}"`,
         `"${data.ARTIST || ''}"`,
         `"${data.TITLE || ''}"`,
         `"${Array.isArray(data.GENRE) ? data.GENRE.join(',') : data.GENRE || ''}"`, // Koma di dalam, diapit kutip
         `"${Array.isArray(data.FORMAT) ? data.FORMAT.join(',') : data.FORMAT || ''}"`, // Koma di dalam, diapit kutip
-        `"${data.LABEL || ''}"`,
+        `"${Array.isArray(data.LABEL) && data.LABEL.length > 0 ? data.LABEL[0] : data.LABEL || ''}"`,
         `"${data.RELEASED || ''}"`,
         `"${data.MEDIA || ''}"`,
         `"${data.COVER_CONDITION || ''}"`,
-        data.HARGA_AKHIR || '', // Harga tetap tanpa kutip
+        (data.HARGA_AKHIR ? `Rp${Number(data.HARGA_AKHIR).toLocaleString('id-ID')}` : ''),
       ];
       csvContent += row.join(';') + '\n'; // Pemisah baris jadi titik koma
     });
@@ -539,29 +577,35 @@ export default {
     URL.revokeObjectURL(url);
     this.showNotification('success', 'Data berhasil diekspor ke CSV (pemisah titik koma)!');
   },
-    async clearIndexedDB() {
-      if (confirm('Apakah Anda yakin ingin menghapus semua data?')) {
-        return new Promise((resolve, reject) => {
-          const request = indexedDB.deleteDatabase('discogsDB');
+  async clearIndexedDB() {
+    if (confirm('Apakah Anda yakin ingin menghapus semua data?')) {
+      return new Promise((resolve, reject) => {
+        const dbNameToDelete = 'discogsDB'; // Simpan nama database dalam variabel
 
-          request.onsuccess = () => {
-            console.log('Database berhasil dihapus.');
-            this.db = null;
-            this.storedData = [];
-            this.activeTab = 'input';
-            this.initDatabase();
-            this.showNotification('success', 'Semua data berhasil dihapus!');
-            resolve();
-          };
+        // Tutup koneksi database jika masih terbuka
+        if (this.db) {
+          this.db.close();
+          this.db = null; // Set ke null setelah ditutup
+        }
 
-          request.onerror = (event) => {
-            console.error('Gagal menghapus database:', event.target.error);
-            this.showNotification('error', 'Gagal menghapus database.');
-            reject(event.target.error);
-          };
-        });
-      }
-    },
+        const request = indexedDB.deleteDatabase(dbNameToDelete);
+
+        request.onsuccess = () => {
+          this.storedData = [];
+          this.activeTab = 'input';
+          this.initDatabase(); // Inisialisasi database kembali setelah dihapus
+          this.showNotification('success', 'Semua data berhasil dihapus!');
+          resolve();
+        };
+
+        request.onerror = (event) => {
+          console.error('Gagal menghapus database:', event.target.error);
+          this.showNotification('error', 'Gagal menghapus database.');
+          reject(event.target.error);
+        };
+      });
+    }
+  },
     showNotification(type, message) {
       this.notification.type = type;
       this.notification.message = message;
