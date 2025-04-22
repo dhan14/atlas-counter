@@ -14,7 +14,7 @@ import DiscogsInput from './components/DiscogsInput.vue';
 
     <main class="flex-1 container mx-auto px-4 py-8">
       <!-- Placeholder slot -->
-      <section class="bg-white rounded-xl shadow-md p-6">
+      <section>
         <DiscogsInput />
       </section>
     </main>
@@ -23,10 +23,6 @@ import DiscogsInput from './components/DiscogsInput.vue';
     <footer class="bg-[#1e1e1e] text-white mt-10">
       <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-sm">
         <p>© 2025 Atlas Record Store. All rights reserved.</p>
-        <div class="space-x-4 mt-2 md:mt-0">
-          <a href="#" class="hover:text-yellow-300">Instagram</a>
-          <a href="#" class="hover:text-yellow-300">Contact</a>
-        </div>
       </div>
     </footer>
   </div>
