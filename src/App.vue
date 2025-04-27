@@ -1,7 +1,6 @@
 <script setup>
-import DiscogsInput from './components/DiscogsInput.vue';
-// import AlbumInfo from './components/AlbumInfo.vue';
-// import ScratchCode from './components/ScratchCode.vue';
+//import DiscogsInput from './components/DiscogsInput.vue';
+import NotFound from './components/NotFound.vue';
 </script>
 
 <template>
@@ -15,7 +14,7 @@ import DiscogsInput from './components/DiscogsInput.vue';
     <main class="flex-1 container mx-auto px-4 py-8">
       <!-- Placeholder slot -->
       <section>
-        <DiscogsInput />
+        <NotFound />
       </section>
     </main>
 
