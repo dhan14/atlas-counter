@@ -5,10 +5,10 @@ import InputDiscogs from './components/InputDiscogs.vue';
 </script>
 
 <template>
-  <div class="bg-gray-100 min-h-screen">
-    <header class="bg-[#1e1e1e] text-white shadow-md">
+  <div class="bg-[#222831] not-even:min-h-screen">
+    <header class="bg-[#222831] shadow-md">
       <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold tracking-wider"> Counter Data</h1>
+        <h1 class="text-2xl font-bold tracking-wider text-[#00ADB5]"> Discogs Scrapper</h1>
       </div>
     </header>
 
@@ -22,7 +22,7 @@ import InputDiscogs from './components/InputDiscogs.vue';
     </main>
 
 
-    <footer class="bg-[#1e1e1e] text-white mt-10">
+    <footer class="bg-[#222831] text-white mt-10 shadow-md">
       <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-sm">
         <p>© 2025 Dhan & Tya. All rights reserved.</p>
       </div>

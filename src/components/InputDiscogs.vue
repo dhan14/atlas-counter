@@ -1,91 +1,105 @@
 <template>
-    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
-      <div class="tabs">
-        <button :class="{ active: activeTab === 'input' }" @click="setActiveTab('input')">Input Data</button>
-        <button :class="{ active: activeTab === 'view' }" @click="setActiveTab('view')">
-          Lihat Data
-          <span v-if="newRecordCount > 0" class="badge">{{ newRecordCount }}</span>
-        </button>
-      </div>
-  
-    </div>
-    <div v-if="activeTab === 'input'" class="bg-white rounded-lg shadow-md p-6">
+    <!-- TAB -->
+    <div class="bg-[rgba(238,238,238,0.1)] rounded-t-lg pt-6 px-6 md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto">
+      <div class="tabs flex justify-center">
+    <button
+      :style="activeTab === 'input' ? 'background-color: #03ADB6; color: #222831;' : 'background-color: #626e6e; color: #eeeeee;'"
+      style="padding: 0.75rem 1rem; font-weight: 600; border: none; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease;"
+      class="rounded-tl-lg" 
+      @click="setActiveTab('input')">
+      Input Data
+    </button>
+
+    <button
+      :style="activeTab === 'view' ? 'background-color: #03ADB6; color: #222831;' :'background-color: #626e6e; color: #eeeeee;'"
+      style="padding: 0.75rem 1rem; font-weight: 600; border: none; cursor: pointer; transition: background-color 0.3s ease, color 0.3s ease;"
+      class="rounded-tr-lg"
+      @click="setActiveTab('view')">
+      Lihat Data
+      <span v-if="newRecordCount > 0" class="badge" style="background-color: #ef4444; color: white; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 9999px; margin-left: 0.5rem;">{{ newRecordCount }}</span>
+    </button>
+</div>
+</div>
+
+    <div v-if="activeTab === 'input'" class="bg-[rgba(238,238,238,0.1)] px-10 py-5 rounded-b-lg p-6md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto">
       <div v-if="notification.show && notification.type === 'success'" class="notification success">{{
         notification.message }}</div>
       <div v-if="notification.show && notification.type === 'error'" class="notification error">{{
         notification.message }}</div>
-      <h2 class="text-lg font-semibold mb-4 text-gray-400">Masukkan ID Album Discogs</h2>
+      <h2 class="flex justify-center text-lg font-semibold mb-4 text-[#00afab]">Masukkan ID Album Discogs</h2>
       <div class="mb-4">
-        <label for="discogsCode" class="block text-gray-700 text-sm font-bold mb-2">
+        <label for="discogsCode" class="block text-sm font-bold mb-2">
           Contoh, Salin kode yang di Highlight ke form di bawah:
           <a href="https://www.discogs.com/release/" class="text-gray-400">https://www.discogs.com/release/</a>
-          <span class="font-bold text-black bg-green-300">221824</span>
+          <span class="font-bold text-black bg-[#00afab]">221824</span>
           <span class="text-gray-400">-Rick-Astley-Never-Gonna-Give-You-Up</span>
         </label>
         <input type="text" id="discogsCode" v-model="discogsCode"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Contoh: 221824" />
       </div>
-      <button @click="fetchReleaseInfo"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-        Cari
-      </button>
+      <div class="flex justify-center">
+        <button @click="fetchReleaseInfo"
+          class="text-white focus:outline-none focus:shadow-outline rounded-lg border border-transparent px-4 py-2 text-base font-medium font-sans bg-[#03adb6] cursor-pointer transition-colors duratiom-250 hover:border-[#212832]">
+          Cari
+        </button>
+      </div>
   
       <div v-if="releaseInfo" class="mt-4">
-        <h3>Preview Data</h3>
+        <h3 class="flex justify-center mt-8 mb-5">Preview Data</h3>
         <div class="flex mx-8">
           <div class="w-1/3">
-            <p class="text-black font-semibold text-left">CATALOG NO</p>
-            <p class="text-black font-semibold text-left">ARTIST</p>
-            <p class="text-black font-semibold text-left">TITLE</p>
-            <p class="text-black font-semibold text-left">GENRE</p>
-            <p class="text-black font-semibold text-left">FORMAT</p>
-            <p class="text-black font-semibold text-left">LABEL</p>
-            <p class="text-black font-semibold text-left">RELEASED</p>
-            <p class="text-black font-semibold text-left">KONDISI COVER</p>
+            <p class="text-white font-semibold text-left">CATALOG NO</p>
+            <p class="text-white font-semibold text-left">ARTIST</p>
+            <p class="text-white font-semibold text-left">TITLE</p>
+            <p class="text-white font-semibold text-left">GENRE</p>
+            <p class="text-white font-semibold text-left">FORMAT</p>
+            <p class="text-white font-semibold text-left">LABEL</p>
+            <p class="text-white font-semibold text-left">RELEASED</p>
+            <p class="text-white font-semibold text-left">KONDISI COVER</p>
           </div>
           <div class="w-1/3 pr-3">
-            <p class="text-black font-semibold text-right">:</p>
-            <p class="text-black font-semibold text-right">:</p>
-            <p class="text-black font-semibold text-right">:</p>
-            <p class="text-black font-semibold text-right">:</p>
-            <p class="text-black font-semibold text-right">:</p>
-            <p class="text-black font-semibold text-right">:</p>
-            <p class="text-black font-semibold text-right">:</p>
-            <p class="text-black font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
+            <p class="text-white font-semibold text-right">:</p>
           </div>
           <div class="w-1/3">
-            <p class="text-black text-left">{{ releaseInfo.catalog_number }}</p>
-            <p class="text-black text-left">{{ releaseInfo.artist }}</p>
-            <p class="text-black text-left">{{ releaseInfo.title }}</p>
-            <p class="text-black text-left">{{ releaseInfo.genre ? releaseInfo.genre.join(', ') : '' }}</p>
-            <p class="text-black text-left">{{ releaseInfo.format ? releaseInfo.format.join(', ') : '' }}</p>
-            <p class="text-black text-left">{{ releaseInfo.label && releaseInfo.label.length > 0 ? releaseInfo.label[0] : '' }}</p>
-            <p class="text-black text-left">{{ releaseInfo.released_year }}</p>
+            <p class="text-white text-left">{{ releaseInfo.catalog_number }}</p>
+            <p class="text-white text-left">{{ releaseInfo.artist }}</p>
+            <p class="text-white text-left">{{ releaseInfo.title }}</p>
+            <p class="text-white text-left">{{ releaseInfo.genre ? releaseInfo.genre.join(', ') : '' }}</p>
+            <p class="text-white text-left">{{ releaseInfo.format ? releaseInfo.format.join(', ') : '' }}</p>
+            <p class="text-white text-left">{{ releaseInfo.label && releaseInfo.label.length > 0 ? releaseInfo.label[0] : '' }}</p>
+            <p class="text-white text-left">{{ releaseInfo.released_year }}</p>
             <div class="flex items-center mb-2">
               <input type="radio" id="coverConditionCover" v-model="coverCondition" value="Cover" class="mr-2">
-              <label class="text-gray-700" for="coverConditionCover">Cover</label>
+              <label class="text-white" for="coverConditionCover">Cover</label>
             </div>
             <div class="flex items-center">
               <input type="radio" id="coverConditionNonCover" v-model="coverCondition" value="Non Cover" class="mr-2">
-              <label class="text-gray-700" for="coverConditionNonCover">Non Cover</label>
+              <label class="text-white" for="coverConditionNonCover">Non Cover</label>
             </div>
           </div>
         </div>
   
         <div class="mt-7 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="border rounded p-4" :class="{ 'bg-gray-400': hargaMode === 'otomatis' }">
-            <label class="block font-bold mb-2 text-gray-700">
+          <div class="border rounded p-4" :class="{ 'bg-[rgba(238,238,238,0.2)]': hargaMode === 'otomatis' }">
+            <label class="block font-bold mb-2 text-[#00afab]">
               <input type="radio" v-model="hargaMode" value="otomatis" class="mr-2"> Harga Otomatis
             </label>
             <div v-if="hargaMode === 'otomatis' || hargaMode === 'manual'" class="mt-2">
               <label :for="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'"
-                class="block text-gray-700 text-sm font-semibold mb-1">Harga {{ selectedCurrency === 'USD' ?
+                class="block text-white text-sm font-semibold mb-1">Harga {{ selectedCurrency === 'USD' ?
                 'Dollar' : 'Euro' }} Di Discogs:</label>
               <div class="flex items-center gap-1">
                 <div>
                   <select id="currency" v-model="selectedCurrency"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
                     :disabled="hargaMode === 'manual'" style="width: auto;">
                     <option value="USD">(USD)</option>
                     <option value="EUR">(EUR)</option>
@@ -96,56 +110,56 @@
                   <div class="flex items-center">
                     <input type="number" :id="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'"
                       v-model="currencyPrice" step="0.01"
-                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
                       :disabled="hargaMode === 'manual'" />
                     <span
-                      class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-500 text-sm p-2">
+                      class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-700 text-sm p-2">
                       {{ selectedCurrency === 'USD' ? '$' : '€' }}
                     </span>
                   </div>
                 </div>
               </div>
   
-              <label for="priceIDR" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Setelah Konversi ke
+              <label for="priceIDR" class="block text-white text-sm font-semibold mt-2 mb-1">Setelah Konversi ke
                 IDR:</label>
               <input type="text" id="priceIDR" :value="formatCurrency(convertedPriceIDR)" readonly
-                class="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm text-center"
+                class="appearance-none w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm text-center"
                 :disabled="hargaMode === 'manual'" />
   
-              <label for="kualitasCoverInput" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Kualitas
+              <label for="kualitasCoverInput" class="block text-white text-sm font-semibold mt-2 mb-1">Kualitas
                 Cover (1-100):</label>
               <div class="flex">
                 <input type="number" id="kualitasCoverInput" v-model.number="kualitasCoverInput" min="1" max="100"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
                   :disabled="hargaMode === 'manual'" />
                 <span
-                  class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-500 text-sm">
+                  class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-700 text-sm">
                   %
                 </span>
               </div>
   
-              <label for="finalPriceOtomatis" class="block text-gray-700 text-sm font-semibold mt-2 mb-1">Harga
+              <label for="finalPriceOtomatis" class="block text-white text-sm font-semibold mt-2 mb-1">Harga
                 Akhir:</label>
               <input type="text" id="finalPriceOtomatis" :value="formatCurrency(finalPrice)" readonly
-                class="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm text-center"
+                class="appearance-none w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm text-center"
                 :disabled="hargaMode === 'manual'" />
             </div>
           </div>
   
-          <div class="border rounded p-4" :class="{ 'bg-gray-400': hargaMode === 'manual' }">
-            <label class="block font-bold mb-2 text-gray-700">
-              <input type="radio" v-model="hargaMode" value="manual" class="mr-2 text-gray-700"> Add Harga Manual
+          <div class="border rounded p-4" :class="{ 'bg-[rgba(238,238,238,0.2)]': hargaMode === 'manual' }">
+            <label class="block font-bold mb-2 text-[#00afab]">
+              <input type="radio" v-model="hargaMode" value="manual" class="mr-2">Harga Manual
             </label>
             <div v-if="hargaMode === 'manual' || hargaMode === 'otomatis'">
               <label for="hargaManual" class="block text-sm font-semibold mt-2 mb-1">Masukkan Harga Manual
                 (IDR):</label>
               <div class="flex">
                 <span
-                  class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-500 text-sm">
+                  class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-700 text-sm">
                   Rp
                 </span>
                 <input type="number" id="hargaManual" v-model.number="hargaManual"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
                   :disabled="hargaMode === 'otomatis'" />
               </div>
             </div>
@@ -153,7 +167,7 @@
         </div>
   
         <button @click="saveToIndexedDBWithCalculation"
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">
+          class="text-white focus:outline-none focus:shadow-outline mt-4 rounded-lg border border-transparent px-4 py-2 text-base font-medium font-sans bg-[#03adb6] cursor-pointer transition-colors duratiom-250 hover:border-[#212832]">
           Simpan
         </button>
       </div>
@@ -161,20 +175,20 @@
       <p v-else class="mt-4 text-gray-500 italic">Masukkan kode Discogs dan klik "Cari".</p>
     </div>
   
-    <div v-if="activeTab === 'view'" class="bg-gray rounded-lg shadow-md p-6 mt-4">
+    <div v-if="activeTab === 'view'" class="bg-gray shadow-md bg-[rgba(238,238,238,0.1)] px-10 py-5 rounded-b-lg md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto">
       <div v-if="notification.show && notification.type === 'success'" class="notification success">{{
         notification.message }}</div>
       <div v-if="notification.show && notification.type === 'error'" class="notification error">{{
         notification.message }}</div>
   
-      <h2 class="text-lg font-semibold mb-4 text-gray-700">Data Tersimpan</h2>
+      <h2 class="text-lg font-semibold mb-4 text-[#00afab] flex justify-center">Data Tersimpan</h2>
       <div class="flex items-center mb-4">
-        <button @click="clearIndexedDB" :disabled="storedData.length === 0"
-          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2">
+        <!-- <button @click="clearIndexedDB" :disabled="storedData.length === 0"
+          class="text-white focus:outline-none focus:shadow-outline mr-2 rounded-lg border border-transparent px-4 py-2 text-base font-medium font-sans bg-[#03adb6] cursor-pointer transition-colors duratiom-250 hover:border-[#212832]">
           Hapus Semua Data
-        </button>
+        </button> -->
         <button @click="toggleEditMode"
-          class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          class="text-white focus:outline-none focus:shadow-outline rounded-lg border border-transparent px-4 py-2 text-base font-medium font-sans bg-[#03adb6] cursor-pointer transition-colors duratiom-250 hover:border-[#212832]">
           {{ isEditMode ? 'Selesai Edit' : 'Mode Edit' }}
         </button>
         <button v-if="isEditMode && selectedToDelete.length > 0" @click="deleteSelectedRecords"
@@ -185,11 +199,11 @@
       <div class="overflow-x-auto">
         <table v-if="storedData.length > 0" class="w-full border-collapse">
             <thead>
-  <tr class="text-gray-700">
-    <th v-if="isEditMode" class="border border-blue-300 p-2 text-left">
+  <tr class="text-[#00afab]">
+    <th v-if="isEditMode" class="border border-blue-300 p-2 text-left" rowspan="2">
       <input type="checkbox" @change="selectAllToDelete">
     </th>
-    <th class="border border-blue-300 p-2 text-left" rowspan="2">No</th>
+    <th class="border border-gray-300 p-2 text-left" rowspan="2">No</th>
     <th class="border border-gray-300 p-2 text-left" rowspan="2">Catalog No</th>
     <th class="border border-gray-300 p-2 text-left" rowspan="2">Artist</th>
     <th class="border border-gray-300 p-2 text-left" rowspan="2">Title</th>
@@ -201,48 +215,48 @@
     <th class="border border-gray-300 p-2 text-left" rowspan="2">Price</th>
     <th v-if="isEditMode" class="border border-gray-300 p-2 text-left" rowspan="2">Aksi</th>
   </tr>
-  <tr class="text-gray-700">
+  <tr class="text-[#00afab]">
     <th class="border border-gray-300 p-2 text-left">Media</th>
     <th class="border border-gray-300 p-2 text-left">Cover</th>
   </tr>
 </thead>
 <tbody>
   <tr v-for="(item, index) in storedData" :key="item.id">
-    <td v-if="isEditMode" class="border border-gray-300 p-2 text-black">
+    <td v-if="isEditMode" class="border border-gray-300 p-2 text-white">
       <input type="checkbox" :value="item.id" @change="toggleDelete(item.id)">
     </td>
-    <td class="border border-gray-300 p-2 text-black">{{ index + 1 }}</td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'CATALOG NO')">
+    <td class="border border-gray-300 p-2 text-white">{{ index + 1 }}</td>
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'CATALOG NO')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ item.data['CATALOG NO'] }}</span>
       <input v-else type="text" class="edit-input" v-model="editedValues['CATALOG NO']">
     </td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'ARTIST')">
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'ARTIST')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ item.data.ARTIST }}</span>
       <input v-else type="text" class="edit-input" v-model="editedValues.ARTIST">
     </td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'TITLE')">
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'TITLE')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ item.data.TITLE }}</span>
       <input v-else type="text" class="edit-input" v-model="editedValues.TITLE">
     </td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'GENRE')">
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'GENRE')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ item.data.GENRE }}</span>
       <input v-else type="text" class="edit-input" v-model="editedValues.GENRE">
     </td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'FORMAT')">
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'FORMAT')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ item.data.FORMAT }}</span>
       <input v-else type="text" class="edit-input" v-model="editedValues.FORMAT">
     </td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'LABEL')">
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'LABEL')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ item.data.LABEL && item.data.LABEL[0] }}</span>
       <input v-else type="text" class="edit-input" v-model="editedValues.LABEL">
     </td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'RELEASED')">
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'RELEASED')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ item.data.RELEASEED }}</span>
       <input v-else type="text" class="edit-input" v-model="editedValues.RELEASEED">
     </td>
-    <td class="border border-gray-300 p-2 text-black"></td>
-    <td class="border border-gray-300 p-2 text-black">{{ item.data.COVER_CONDITION }}</td>
-    <td class="border border-gray-300 p-2 text-black" @click="startEdit(item.id, 'HARGA_AKHIR')">
+    <td class="border border-gray-300 p-2 text-white"></td>
+    <td class="border border-gray-300 p-2 text-white">{{ item.data.COVER_CONDITION }}</td>
+    <td class="border border-gray-300 p-2 text-white" @click="startEdit(item.id, 'HARGA_AKHIR')">
       <span v-if="!isEditMode || editingRecordId !== item.id">{{ formatCurrency(item.data.HARGA_AKHIR) }}</span>
       <input v-else type="number" class="edit-input" v-model.number="editedValues.HARGA_AKHIR">
     </td>
@@ -263,7 +277,7 @@
     </div>
 
     <button @click="exportToCsv" :disabled="storedData.length === 0"
-      class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 mr-2">
+      class="text-white focus:outline-none focus:shadow-outline mt-4 mr-2 rounded-lg border border-transparent px-4 py-2 text-base font-medium font-sans bg-[#03adb6] cursor-pointer transition-colors duratiom-250 hover:border-[#212832]">
       Ekspor ke CSV
     </button>
 
