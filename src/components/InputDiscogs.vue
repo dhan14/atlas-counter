@@ -441,7 +441,7 @@ export default {
       this.fetchError = null;
       this.clearNotification();
       try {
-        const response = await fetch(`http://127.0.0.1:5000/discogs/release_info/${this.discogsCode}`);
+        const response = await fetch(`https://bhang-records-simplify-api.vercel.app/discogs/release_info/${this.discogsCode}`);
         if (!response.ok) {
           const message = `Terjadi kesalahan: ${response.status}`;
           throw new Error(message);
