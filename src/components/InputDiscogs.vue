@@ -35,8 +35,9 @@
           <span class="text-gray-400">-Rick-Astley-Never-Gonna-Give-You-Up</span>
         </label>
         <input type="text" id="discogsCode" v-model="discogsCode"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Contoh: 221824" />
+  @keyup.enter="fetchReleaseInfo"
+  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+  placeholder="Contoh: 221824" />
       </div>
       <div class="flex justify-center">
         <button @click="fetchReleaseInfo"
@@ -109,9 +110,10 @@
                 <div class="flex-1">
                   <div class="flex items-center">
                     <input type="number" :id="selectedCurrency === 'USD' ? 'priceUSD' : 'priceEUR'"
-                      v-model="currencyPrice" step="0.01"
-                      class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
-                      :disabled="hargaMode === 'manual'" />
+  v-model="currencyPrice" step="0.01"
+  @keyup.enter="saveToIndexedDBWithCalculation"
+  class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
+  :disabled="hargaMode === 'manual'" />
                     <span
                       class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-700 text-sm p-2">
                       {{ selectedCurrency === 'USD' ? '$' : '€' }}
@@ -130,8 +132,9 @@
                 Cover (1-100):</label>
               <div class="flex">
                 <input type="number" id="kualitasCoverInput" v-model.number="kualitasCoverInput" min="1" max="100"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
-                  :disabled="hargaMode === 'manual'" />
+  @keyup.enter="saveToIndexedDBWithCalculation"
+  class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
+  :disabled="hargaMode === 'manual'" />
                 <span
                   class="inline-flex items-center px-3 rounded border border-l-0 bg-gray-50 text-gray-700 text-sm">
                   %
@@ -159,8 +162,9 @@
                   Rp
                 </span>
                 <input type="number" id="hargaManual" v-model.number="hargaManual"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
-                  :disabled="hargaMode === 'otomatis'" />
+  @keyup.enter="saveToIndexedDBWithCalculation"
+  class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline text-sm"
+  :disabled="hargaMode === 'otomatis'" />
               </div>
             </div>
           </div>
